@@ -1,6 +1,6 @@
 # Introduction to UAV Design - EC4.402 - Team Omicron
 
-> **Note**: This is the docker branch, intended for Ubuntu 20.04 (LTS) and beyond systems. It will run the Rotors back-end (non-GUI) in a docker container and will use the GUI (front-end) and other components on the host system. For the main project, see the [main](https://github.com/TheProjectsGuy/UAV22-EC4.402-Project/tree/main) branch.
+> **Note**: This is the docker branch, intended for Ubuntu 20.04 (LTS) and beyond systems. It will run the RotorS back-end (non-GUI) in a docker container and will use the GUI (front-end) and other components on the host system. For the main project, see the [main](https://github.com/TheProjectsGuy/UAV22-EC4.402-Project/tree/main) branch.
 
 **Team Name**: Omicron <br>
 **Project Topic**: Aerial Photography and Videography of sites <br>
@@ -19,8 +19,9 @@
         - [Extra files](#extra-files)
     - [Setting up RotorS](#setting-up-rotors)
         - [Rotors Docker container](#rotors-docker-container)
-            - [Building Image](#building-image)
-            - [Running image](#running-image)
+    - [Docker commands](#docker-commands)
+        - [Building Image](#building-image)
+        - [Running Image](#running-image)
     - [References](#references)
 
 ## Contents
@@ -31,8 +32,8 @@ The contents of this folder are summarized below
 | :----- | :-------- | :---------- |
 | 1 | [reading](./reading/README.md) folder | All reading material |
 | 2 | [docker](./docker/) | Contains the Docker file (for containerizing the project) |
-| 3 | [rotors_ws](./rotors_ws/) folder | Contains the official RotorS packages for the ROS workspace in the Docker container |
-| 4 | [custom_ws](./custom_ws/) | A custom ROS workspace that will be volume mounted to the Docker container. This feature is **still in development** |
+| 3 | [rotors_ws](./rotors_ws/) folder | Contains the official RotorS packages for the ROS workspace in the Docker container. This should be built only in the container. |
+| 4 | [custom_ws](./custom_ws/) folder | A custom ROS workspace that will be volume mounted to the Docker container. This feature is **still in development**. This should be build only in the container. |
 
 ### Extra files
 
@@ -58,7 +59,9 @@ You need to clone this repository recursively to include the submodules for Roto
 git clone --recursive -b docker git@github.com:TheProjectsGuy/UAV22-EC4.402-Project.git
 ```
 
-#### Building Image
+## Docker commands
+
+### Building Image
 
 - To build the docker container, run the following
 
@@ -67,9 +70,9 @@ git clone --recursive -b docker git@github.com:TheProjectsGuy/UAV22-EC4.402-Proj
     docker build --tag rotors:latest -f ./docker/Dockerfile .
     ```
 
-- You could see the [rotors_ws](./rotors_ws/README.md) folder for instructions to build the RotorS workspace.
+- You could see the [rotors_ws](./rotors_ws/README.md) folder for instructions to build the RotorS workspace. We strongly suggest you build the workspace as a mount (using the optional method described in [rotors_ws](./rotors_ws/README.md)).
 
-#### Running image
+### Running Image
 
 - Run the container using the following command
 
