@@ -28,7 +28,7 @@ RUN rosdep update
 # Mount using `-v` manually
 # - Workspace for RotorS -
 COPY ./rotors_ws /ros_workspaces/rotors_ws/
-# - Custom workspace for Docker container -
+# - Custom workspace for Docker container (volume mount) -
 # COPY ./custom_ws /ros_workspaces/custom_ws/src/
 
 # -- Set the entrypoint --

@@ -19,6 +19,8 @@
         - [Extra files](#extra-files)
     - [Setting up RotorS](#setting-up-rotors)
         - [Rotors Docker container](#rotors-docker-container)
+            - [Building Image](#building-image)
+            - [Running image](#running-image)
     - [References](#references)
 
 ## Contents
@@ -29,6 +31,8 @@ The contents of this folder are summarized below
 | :----- | :-------- | :---------- |
 | 1 | [reading](./reading/README.md) folder | All reading material |
 | 2 | [docker](./docker/) | Contains the Docker file (for containerizing the project) |
+| 3 | [rotors_ws](./rotors_ws/) folder | Contains the official RotorS packages for the ROS workspace in the Docker container |
+| 4 | [custom_ws](./custom_ws/) | A custom ROS workspace that will be volume mounted to the Docker container. This feature is **still in development** |
 
 ### Extra files
 
@@ -48,23 +52,31 @@ Setting up the RotorS simulator
 RotorS simulator natively works with Ubuntu Xenial (16.04 LTS). We can use Docker to virtualize it.
 There are better alternatives like [shrmpy/rotors](https://github.com/shrmpy/rotors) available. However, this repository also comes with a Docker solution.
 
-1. To build the docker container, run the following
+You need to clone this repository recursively to include the submodules for RotorS Docker workspace
+
+```sh
+git clone --recursive -b docker git@github.com:TheProjectsGuy/UAV22-EC4.402-Project.git
+```
+
+#### Building Image
+
+- To build the docker container, run the following
 
     ```bash
     # In the root folder of the repository
     docker build --tag rotors:latest -f ./docker/Dockerfile .
     ```
 
-- The `rotors_src` was created by running the following commands (in the root project folder)
+- You could see the [rotors_ws](./rotors_ws/README.md) folder for instructions to build the RotorS workspace.
+
+#### Running image
+
+- Run the container using the following command
+
+    This will mount the custom workspace volume to the container.
 
     ```bash
-    git clone git@github.com:ethz-asl/rotors_simulator.git rotorsws_src
-    ```
-
-- Run the container using
-
-    ```bash
-    docker run --network=host -i -t --rm --name "rotors-xenial" rotors:latest bash
+    docker run --network=host -i -t --rm --name "rotors-xenial" -v $PWD/custom_ws:/ros_workspaces/custom_ws rotors:latest
     ```
 
 ## References
