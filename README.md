@@ -1,5 +1,7 @@
 # Introduction to UAV Design - EC4.402 - Team Omicron
 
+> **Note**: This is the docker branch, intended for Ubuntu 20.04 (LTS) and beyond systems. It will run the Rotors back-end (non-GUI) in a docker container and will use the GUI (front-end) and other components on the host system. For the main project, see the [main](https://github.com/TheProjectsGuy/UAV22-EC4.402-Project/tree/main) branch.
+
 **Team Name**: Omicron <br>
 **Project Topic**: Aerial Photography and Videography of sites <br>
 **Team Members**
@@ -17,7 +19,6 @@
         - [Extra files](#extra-files)
     - [Setting up RotorS](#setting-up-rotors)
         - [Rotors Docker container](#rotors-docker-container)
-        - [ROS Neotic - Local installation](#ros-neotic---local-installation)
     - [References](#references)
 
 ## Contents
@@ -27,6 +28,7 @@ The contents of this folder are summarized below
 | S. No. | Item Name | Description |
 | :----- | :-------- | :---------- |
 | 1 | [reading](./reading/README.md) folder | All reading material |
+| 2 | [docker](./docker/) | Contains the Docker file (for containerizing the project) |
 
 ### Extra files
 
@@ -43,43 +45,26 @@ Setting up the RotorS simulator
 
 ### Rotors Docker container
 
-RotorS simulator natively works with Ubuntu Xenial (16.04 LTS). We can use Docker to simulate it.
+RotorS simulator natively works with Ubuntu Xenial (16.04 LTS). We can use Docker to virtualize it.
 There are better alternatives like [shrmpy/rotors](https://github.com/shrmpy/rotors) available. However, this repository also comes with a Docker solution.
 
 1. To build the docker container, run the following
 
     ```bash
-    cd docker
-    docker build . -t rotors:xenial
+    # In the root folder of the repository
+    docker build --tag rotors:latest -f ./docker/Dockerfile .
     ```
 
-### ROS Neotic - Local installation
-
-If you have ROS Noetic (tested on WSL), a local installation would involve the following steps (assuming that ROS is already sourced)
-
-1. Create a workspace for the `rotors_simulator` stuff
+- The `rotors_src` was created by running the following commands (in the root project folder)
 
     ```bash
-    mkdir ~/rotors_simulator
-    cd ~/rotors_simulator
+    git clone git@github.com:ethz-asl/rotors_simulator.git rotorsws_src
     ```
 
-    This will be the main workspace
-
-2. Clone the official [ethz-asl/rotors_simulator](https://github.com/ethz-asl/rotors_simulator) repository in the workspace folder. This workspace will contain everything 'rotors' related.
+- Run the container using
 
     ```bash
-    git clone git@github.com:ethz-asl/rotors_simulator.git src
-    ```
-
-    This will clone all code (it will take some time).
-
-3. Install some dependencies for ROS. The RotorS simulator is build on top of other dependencies (they've listed them out).
-
-    Install [octomap](https://wiki.ros.org/octomap): A map representation using voxels.
-
-    ```bash
-    sudo apt install ros-noetic-octomap ros-noetic-octomap-msgs -y
+    docker run --network=host -i -t --rm --name "rotors-xenial" rotors:latest bash
     ```
 
 ## References

@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 RUN apt-get update && apt-get upgrade -y
 # Install basic utilities
 RUN apt-get install -y net-tools lsb-release \
-    wget
+    wget tree
 
 # -- Install ROS in the container --
 # Add ROS in list
@@ -20,5 +20,17 @@ RUN apt-get install -y ros-kinetic-desktop-full ros-kinetic-joy \
 # Initialize ROS dependencies
 RUN rosdep init
 RUN rosdep update
-# Source ROS installation
+# Source ROS installation (now handled by entrypoint)
 # RUN source /opt/ros/kinetic/setup.bash
+
+# DO NOT CHANGE ANYTHING ABOVE THIS (rebuild will take 3GB download!)
+# -- Move the files to the ROS workspace(s) --
+# Mount using `-v` manually
+# - Workspace for RotorS -
+COPY ./rotors_ws /ros_workspaces/rotors_ws/
+# - Custom workspace for Docker container -
+# COPY ./custom_ws /ros_workspaces/custom_ws/src/
+
+# -- Set the entrypoint --
+COPY ./docker/rotors_entrypoint.sh /rotors_entrypoint.sh
+ENTRYPOINT [ "/rotors_entrypoint.sh" ]

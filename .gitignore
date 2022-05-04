@@ -1,2 +1,5 @@
 # Ignore VSCode
 /.vscode/
+
+# Ignore scratchpad
+/scratchpad.md
