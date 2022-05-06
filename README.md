@@ -9,6 +9,8 @@
 | 1 | Avneesh Mishra | 2021701032 | avneesh.mishra@research.iiit.ac.in |
 | 2 | M Aditya Sharma | 2021701046 | aditya.sharm@research.iiit.ac.in |
 
+> **Note**: The project has three implementations. Check the [dev-aditya](https://github.com/TheProjectsGuy/UAV22-EC4.402-Project/tree/dev-aditya) branch for simulation on Ubuntu 20.04 and implementation of PD controller. Check [dev-avneesh](https://github.com/TheProjectsGuy/UAV22-EC4.402-Project/tree/dev-avneesh) for WSL and spring control. Check [docker](https://github.com/TheProjectsGuy/UAV22-EC4.402-Project/tree/docker) branch for setting up RotorS in docker (GUI not supported).
+
 ## Table of contents
 
 - [Introduction to UAV Design - EC4.402 - Team Omicron](#introduction-to-uav-design---ec4402---team-omicron)
