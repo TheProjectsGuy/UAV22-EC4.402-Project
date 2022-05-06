@@ -1,0 +1,47 @@
+# MAV parameters
+mav_m: 1.0  # Mass of UAV - in 'kg'
+L: 0.21     # Arm length (center to rotor) - in 'm'
+J:  # Inertia tensor of the MAV
+  ixx: 0.01
+  ixy: 0.0
+  ixz: 0.0
+  iyy: 0.01
+  iyz: 0.0
+  izz: 0.02
+
+# Environment parameters
+env_g: 9.8  # Gravity magnitude in environment - in 'm/s^2'
+
+# Propeller parameters
+prop:
+  # thrust_coeff: 2e-7  # Thrust (in 'N') per RPM^2 (default: 9.9865e-06)
+  thrust_coeff: 9.9865e-06  # Thrust (in 'N') per RPM^2 (default: 9.9865e-06)
+  # torque_coeff: 1e-9  # Torque (in 'Nm') per RPM^2 (default: 0.016)
+  torque_coeff: 0.016  # Torque (in 'Nm') per RPM^2 (default: 0.016)
+
+# Limits (for caution)
+limits:
+  max_prop_rpm: 700.0  # Max. RPM of propellers
+  # Angle bounds (for controller change) in degrees
+  b_phi_d: 25.0   # Phi - Roll
+  b_theta_d: 25.0 # Theta - Pitch
+  b_psi_d: 5.0    # Psi - Yaw
+
+# Controller
+kp_pos: [1.0, 1.0, 15.0]  # Position Kp gains
+kd_pos: [2.0, 2.0, 20.0]  # Position Kd gains
+kp_ang: [0.3, 0.3, 5.0]   # Angle Kp gains
+kd_ang: [2.0, 2.0, 1.0]   # Angle Kd gains
+
+# Topics for sensing and debug
+topics:
+  # Sensor data
+  sensing:
+    # odom: "/pelican/odometry_sensor1/pose"  # Deprecated!
+    odom: "/pelican/odometry_sensor1/odometry"
+  # Publishing to these topics
+  pub:
+    # Motor speed controls (target points to gazebo)
+    motor_c: "/pelican/command/motor_speed"
+    # Debug topics
+    debug: "None"

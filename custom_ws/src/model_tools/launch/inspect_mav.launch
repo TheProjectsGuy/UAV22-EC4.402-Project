@@ -1,0 +1,24 @@
+<launch>
+    <!-- Inspect an MAV model in RViZ -->
+    <arg name="rviz_config" default="$(find model_tools)/rviz/view_mav.rviz" doc="The .rviz configuration file" />
+    <arg name="mav_name" default="pelican" doc="The MAV name (*.xacro) must exist in package" />
+    <arg name="pkg_name" default="rotors_description" doc="Package containing the XACRO files (in the urdf folder)" />
+
+    <!-- For the launch file (internal) -->
+    <arg name="xacro_f" value="$(eval find(arg('pkg_name')) + '/urdf/' + arg('mav_name') + '.xacro')" />
+
+    <!-- Construct the XACRO file: A .xacro file to display (full path)-->
+    <param name="xacro_file" value="$(arg xacro_f)" />
+    <!-- Load the model into robot_description -->
+    <param name="robot_description" command="xacro $(arg xacro_f) namespace:=mav_rotor"/>
+
+    <!-- RViz node -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_config)" required="true" />
+    <!-- Joint State Publisher (GUI) -->
+    <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" />
+    <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <!-- View tf tree -->
+    <node name="rqt_tf_tree" pkg="rqt_tf_tree" type="rqt_tf_tree" />
+
+</launch>

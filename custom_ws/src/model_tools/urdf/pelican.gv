@@ -1,0 +1,20 @@
+digraph G {
+node [shape=box];
+"pelican/base_link" [label="pelican/base_link"];
+"pelican/base_link_inertia" [label="pelican/base_link_inertia"];
+"pelican/rotor_0" [label="pelican/rotor_0"];
+"pelican/rotor_1" [label="pelican/rotor_1"];
+"pelican/rotor_2" [label="pelican/rotor_2"];
+"pelican/rotor_3" [label="pelican/rotor_3"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"pelican/base_link" -> "pelican/base_joint" [label="xyz: 0 0 0 \nrpy: 0 -0 0"]
+"pelican/base_joint" -> "pelican/base_link_inertia"
+"pelican/base_link" -> "pelican/rotor_0_joint" [label="xyz: 0.21 0 0.05 \nrpy: 0 -0 0"]
+"pelican/rotor_0_joint" -> "pelican/rotor_0"
+"pelican/base_link" -> "pelican/rotor_1_joint" [label="xyz: 0 0.21 0.05 \nrpy: 0 -0 0"]
+"pelican/rotor_1_joint" -> "pelican/rotor_1"
+"pelican/base_link" -> "pelican/rotor_2_joint" [label="xyz: -0.21 0 0.05 \nrpy: 0 -0 0"]
+"pelican/rotor_2_joint" -> "pelican/rotor_2"
+"pelican/base_link" -> "pelican/rotor_3_joint" [label="xyz: 0 -0.21 0.05 \nrpy: 0 -0 0"]
+"pelican/rotor_3_joint" -> "pelican/rotor_3"
+}

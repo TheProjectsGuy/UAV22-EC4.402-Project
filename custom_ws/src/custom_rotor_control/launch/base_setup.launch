@@ -1,0 +1,66 @@
+<launch>
+    <!-- Launches an empty world with the UAV and the controller ready -->
+    <arg name="mav" default="pelican" />
+    <arg name="world_name" default="basic" />
+    <arg name="world_pkg" default="rotors_gazebo" />
+    <arg name="gui" default="true" />
+    <arg name="verbose" default="false" />
+    <arg name="paused" default="false" />
+    <arg name="controller" default="lee" /> <!-- lee, custom, none -->
+    <!-- Mainly debugging -->
+    <arg name="enable_logging" default="false" />
+    <arg name="enable_ground_truth" default="true" />
+
+    <!-- Internal parameters -->
+    <arg name="gzworld_file" value="$(eval find(arg('world_pkg')) + '/worlds/' + arg('world_name') + '.world')" />
+    
+    <!-- Update environment paths -->
+    <env name="GAZEBO_MODEL_PATH" value="${GAZEBO_MODEL_PATH}:$(find rotors_gazebo)/models"/>
+    <env name="GAZEBO_RESOURCE_PATH" value="${GAZEBO_RESOURCE_PATH}:$(find rotors_gazebo)/models"/>
+    <!-- <param name="debug" value="$(arg gzworld_file)" /> -->
+
+    <!-- Launch gazebo -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(arg gzworld_file)" />
+        <arg name="paused" value="$(arg paused)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="verbose" value="$(arg verbose)"/>
+    </include>
+    <!-- All things RotorS -->
+    <group ns="$(arg mav)">
+        <!-- Spawn model -->
+        <include file="$(find rotors_gazebo)/launch/spawn_mav.launch">
+            <arg name="mav_name" value="$(arg mav)" />
+            <arg name="model" value="$(find rotors_description)/urdf/mav_generic_odometry_sensor.gazebo" />
+            <arg name="enable_logging" value="$(arg enable_logging)" />
+            <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
+            <arg name="log_file" value="$(arg mav)"/>
+        </include>
+        <!-- Controller group: Lee controller -->
+        <group if="$(eval arg('controller') == 'lee')">
+            <!-- Lee position controller -->
+            <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
+                <rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_$(arg mav).yaml" />
+                <rosparam command="load" file="$(find rotors_gazebo)/resource/$(arg mav).yaml" />
+                <remap from="odometry" to="odometry_sensor1/odometry" />
+            </node>
+        </group>
+        <!-- Controller group: custom -->
+        <group if="$(eval arg('controller') == 'custom')">
+            <node name="custom_mav_controller_node" pkg="custom_rotor_control" type="custom_uav_controller.py" output="screen">
+                <param name="config" type="yaml" command="cat '$(find custom_rotor_control)/configs/custom_map_controller.yaml'" />
+            </node>
+            <!-- Log messages -->
+            <!-- <node name="rqt_console_logs_node" pkg="rqt_console" type="rqt_console" /> -->
+        </group>
+        <!-- Controller group: None -->
+        <group if="$(eval arg('controller') == 'none')">
+            <!-- No controller! -->
+        </group>
+        <!-- Controller  -->
+        <!-- For visualization and TF -->
+        <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+    </group>
+
+</launch>
